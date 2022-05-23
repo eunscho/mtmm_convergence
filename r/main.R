@@ -1,13 +1,14 @@
 main <- function(start = 1, end = 1296) {
   n <- c(100, 250, 500, 1000)
-  fcor <- c(.7, 1 - 1e-10) # focal traits correlation (t1  t2)
-  nfcor <- c(.3, .5) # nonfocal traits correlation
-  mcor <- c(.2, .4) # method correlation
-  tpat <- list(c(.5, .5, .5), c(.7, .3, .5)) # trait loading pattern
-  mpat <- list(c(.3, .3, .3), c(.4, .2, .3)) # method loading pattern
-  conditions <- tidyr::crossing(n, fcor, nfcor, mcor, tpat, mpat)
-  colnames(conditions) <- c("n", "fcor", "nfcor", "mcor", "tpat", "mpat")
-  REP_PER_CONDITION <- 1000
+  m <- c(3, 5)
+  t <- c(3, 5)
+  mload <- c(.17, .28, .48)
+  tload <- c(.31, .50, .69)
+  mcor <- c(.02, .29, .58)
+  tcor <- c(.07, .36, .61)
+  conditions <- tidyr::crossing(n, m, t, mload, tload, mcor, tcor)
+  colnames(conditions) <- c("n", "m", "t", "mload", "tload", "mcor", "tcor")
+  REP_PER_CONDITION <- 100
   SET_PER_CONDITION <- 10
   rep_sets <- 1:SET_PER_CONDITION
   reps_per_set <- 1:(REP_PER_CONDITION/SET_PER_CONDITION)
@@ -17,10 +18,10 @@ main <- function(start = 1, end = 1296) {
       tictoc::tic()
       print(paste("Starting condition number", condition_number, "rep", rep_set))
       print(conditions[condition_number, ])
-      filename <- paste0("allcor", condition_number, "-", rep_set, ".csv")
+      filename <- paste0("conv", condition_number, "-", rep_set, ".csv")
       if (!file.exists(filename)) {
         for (rep in reps_per_set) {
-          cat("allcor: ", condition_number, "rep set: ", rep_set, "rep: ", rep)
+          cat("conv: ", condition_number, "rep set: ", rep_set, "rep: ", rep)
           data <- generate_dat (conditions, condition_number, rep_set, rep)
           temp <- analyze_dat (conditions, condition_number, rep_set, rep, data)
           if (rep == 1) {
