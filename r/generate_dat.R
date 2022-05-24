@@ -9,12 +9,14 @@ generate_dat <- function(conditions, condition_number, rep_set, rep) {
   mcor <- as.double(conditions[condition_number, 6]) 
   tcor <- as.double(conditions[condition_number, 7]) 
 
-  mloading <- my_sample(mload, m * t)
-  tloading <- my_sample(tload, m * t)
+  # mloading <- rep(mload, m * t)
+  # tloading <- rep(tload, m * t)
   k <- 1
-  LY <- bind(LYfree(t, m, k), LYpop(t, m, k, tloading, mloading))
+  LY <- bind(LYfree(t, m, k), LYpop(t, m, k, rep(tload, m * t), rep(mload, m * t)))
+  tcor <- rep(tcor, t * (t - 1) / 2) # method correlations
+  mcor <- rep(mcor, m * (m - 1) / 2) # method correlations
 
-  PS <- binds(PSfree(t, m), PSpop(t, m, tcor = tcor, mcor))
+  PS <- binds(PSfree(t, m), PSpop(t, m, tcor, mcor))
   error.cor <- matrix(0, t * m * k, t * m * k)
   diag(error.cor) <- 1
   RTE <- binds(error.cor)
