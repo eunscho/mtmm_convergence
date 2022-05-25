@@ -11,7 +11,32 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
 
   cdata <- composite(data, t, m, k) # transform items scores to composite scores
   # ctcm: correlated traits correlated methods 
-  mdl <- vector("character")
+  m_ctcm <- vector("character")
+  for (i in 1:t) {
+    m_ctcm <- paste0(m_ctcm, 'T', i, ' =~ NA * t', i, 'm1')
+    for (j in 2:m) {
+      m_ctcm <- paste0(m_ctcm, '+ t', i, 'm', j)
+    }
+    m_ctcm <- paste0(m_ctcm, ';')
+    m_ctcm <- paste0(m_ctcm, 'T', i, ' ~~ 1 * T', i, ';')
+  }
+  for (j in 1:m) {
+    m_ctcm <- paste0(m_ctcm, 'M', j, ' =~ NA * t1m', j)
+    for (i in 2:t) {
+      m_ctcm <- paste0(m_ctcm, '+ t', i, 'm', j)
+    }
+    m_ctcm <- paste0(m_ctcm, ';')
+    m_ctcm <- paste0(m_ctcm, 'M', j, ' ~~ 1 * M', j, ';')
+  }
+  for (i in 1:t) {
+    for (j in 1:m) {
+      m_ctcm <- paste0(m_ctcm, 'T', i, ' ~~ 0 * M', j, ';')
+      m_ctcm <- paste0(m_ctcm, 't', i, 'm', j, ' ~~ c', i, j, ' * t', i, 'm', j, ';')
+    }
+  }
+  
+  
+  
   if (m == 3) {
     if (t == 3) {
       m_ctcm <- 'T1 =~ NA * t1m1 + t1m2 + t1m3
@@ -24,18 +49,28 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
                  M1 ~~ 1 * M1; M2 ~~ 1 * M2; M3 ~~ 1 * M3 
                  T1 ~~ 0 * M1; T1 ~~ 0 * M2; T1 ~~ 0 * M3 
                  T2 ~~ 0 * M1; T2 ~~ 0 * M2; T2 ~~ 0 * M3 
-                 T3 ~~ 0 * M1; T3 ~~ 0 * M2; T3 ~~ 0 * M3'
+                 T3 ~~ 0 * M1; T3 ~~ 0 * M2; T3 ~~ 0 * M3
+                 t1m1 ~~ c11 * t1m1; t1m2 ~~ c12 * t1m2; t1m3 ~~ c13 * t1m3
+                 t2m1 ~~ c21 * t2m1; t2m2 ~~ c22 * t2m2; t2m3 ~~ c23 * t2m3
+                 t3m1 ~~ c31 * t3m1; t3m2 ~~ c32 * t3m2; t3m3 ~~ c33 * t3m3'
+      m_ctcm_e <- paste(m_ctcm,
+                        'c11 > 0; c12 > 0; c13 > 0; c21 > 0; c22 > 0; c23 >0
+                        c31 > 0; c32 > 0; c33 > 0;')
       m_ctcm_r <- paste(m_ctcm,
-                        't1m1 ~~ c11 * t1m1; t1m2 ~~ c12 * t1m2; t1m3 ~~ c13 * t1m3
-                        t2m1 ~~ c21 * t2m1; t2m2 ~~ c22 * t2m2; t2m3 ~~ c23 * t2m3
-                        t3m1 ~~ c31 * t3m1; t3m2 ~~ c32 * t3m2; t3m3 ~~ c33 * t3m3
-                        c11 > 0; c12 > 0; c13 > 0; c21 > 0; c22 > 0; c23 >0
-                        c31 > 0; c32 > 0; c33 >0;')
+                        'P11 =~ NA * t1m1; P11 ~~ 1 * P11;
+                        P12 =~ NA * t1m2; P12 ~~ 1 * P12;
+                        P13 =~ NA * t1m3; P13 ~~ 1 * P13;
+                        P21 =~ NA * t2m1; P21 ~~ 1 * P21;
+                        P22 =~ NA * t2m2; P22 ~~ 1 * P22;
+                        P23 =~ NA * t2m3; P23 ~~ 1 * P23;
+                        P31 =~ NA * t3m1; P31 ~~ 1 * P31;
+                        P32 =~ NA * t3m2; P32 ~~ 1 * P32;
+                        P33 =~ NA * t3m3; P33 ~~ 1 * P33;
+                        c11 = 0; c12 = 0; c13 = 0; c21 = 0; c22 = 0; c23 =0
+                        c31 = 0; c32 = 0; c33 = 0;')
       m_ctcm_c <- paste(m_ctcm,
                         'T1 ~~ a12 * T2; T1 ~~ a13 * T3; T2 ~~ a23 * T3; 
-                        a12 > -1; a12 < 1; a13 > -1; a13 < 1; a23 > -1; a23 < 1;'
-                        
-                        )
+                        a12 > -1; a12 < 1; a13 > -1; a13 < 1; a23 > -1; a23 < 1;')
     }
   }
 
