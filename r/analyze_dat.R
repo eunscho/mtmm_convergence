@@ -9,7 +9,9 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
   mcor <- as.double(conditions[condition_number, 6]) 
   tcor <- as.double(conditions[condition_number, 7]) 
 
-  cdata <- composite(data, t, m, k) # transform items scores to composite scores
+  ###############################################################################
+  # Make Models
+  ###############################################################################
   # ct: correlated trait, common module
   m_ct <- vector("character")
   for (i in 1:t) {
@@ -46,6 +48,7 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
       #m_ctcm <- paste0(m_ctcm, 't', i, 'm', j, ' ~~ c', i, j, ' * t', i, 'm', j, ';')
     }
   }
+  m_ctcmuc <- m_ctcm
   # Rindskopf's reparametrization
   m_ctcmr <- m_ctcm
   for (i in 1:t) {
@@ -95,7 +98,6 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
       m_ctcmfc <- paste0(m_ctcmfc, 'b', i, j, ' < 1;')
     }
   }
-  
 
   # ctcu: ct-correlated uniqueness
   m_ctcu <- m_ct
@@ -121,9 +123,38 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
       #m_ctmin <- paste0(m_ctmin, 't', i, 'm', j, ' ~~ c', i, j, ' * t', i, 'm', j, ';')
     }
   }
+  ###############################################################################
+  # Estimate Models
+  ############################################################################### 
+  # estimate output
+  o_ctcmuc <- cfa(m_ctcmuc, data, control = list(iter.max = 250))
+  o_ctcmr <- cfa(m_ctcmr, data, control = list(iter.max = 250))
+  o_ctcmpc <- cfa(m_ctcmpc, data, control = list(iter.max = 250))
+  o_ctcmfc <- cfa(m_ctcmfc, data, control = list(iter.max = 250))
+  o_ctcu <- cfa(m_ctcu, data, control = list(iter.max = 250))
+  o_ctmin <- cfa(m_ctmin, data, control = list(iter.max = 250))
+  # convergence
+  c_ctcmuc <- lavInspect(o_ctcmuc, "converged")
+  c_ctcmr <- lavInspect(o_ctcmr, "converged")
+  c_ctcmpc <- lavInspect(o_ctcmpc, "converged")
+  c_ctcmfc <- lavInspect(o_ctcmfc, "converged")
+  c_ctcu <- lavInspect(o_ctcu, "converged")
+  c_ctmin <- lavInspect(o_ctmin, "converged")
+  # fit
+  f_ctcmuc <- ifelse(c_ctcmuc, lavInspect(o_ctcmuc, "fit"), NA)
+  f_ctcmr <- ifelse(c_ctcmr, lavInspect(o_ctcmr, "fit"), NA)
+  f_ctcmpc <- ifelse(c_ctcmpc, lavInspect(o_ctcmpc, "fit"), NA)
+  f_ctcmfc <- ifelse(c_ctcmfc, lavInspect(o_ctcmfc, "fit"), NA)
+  f_ctcu <- ifelse(c_ctcu, lavInspect(o_ctcu, "fit"), NA)
+  f_ctmin <- ifelse(c_ctmin, lavInspect(o_ctmin, "fit"), NA)
+  # chisquare
+  chi_ctcmuc <- f_ctcmuc['chisq']
+  chi_ctcmr <- f_ctcmr['chisq']
+  chi_ctcmpc <- f_ctcmpc['chisq']
+  chi_ctcmfc <- f_ctcmfc['chisq']
+  chi_ctcu <- f_ctcu['chisq']
+  chi_ctmin <- f_ctmin['chisq']
   
-  
-
   
   ###############################################################################
   # Report output
@@ -132,52 +163,25 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
                     rep_set = rep_set,
                     rep = rep,
                     n = n,
-                    fcor = fcor,
-                    nfcor = nfcor,
+                    m = m,
+                    t = t,
+                    mload = mload,
+                    tload = tload,
                     mcor = mcor,
-                    tpat = tpat,
-                    mpat = mpat,
-                    CF1 = CF1,
-                    # raw_hthm_5tol = raw_hthm_5tol,
-                    # raw_hthm_10tol = raw_hthm_10tol,
-                    CF2 = CF2,
-                    # raw_htmm_20tol = raw_htmm_20tol,
-                    # raw_htmm_30tol = raw_htmm_30tol,
-                    CF3 = CF3,
-                    CF4 = CF4,
-                    GT1 = GT1,
-                    GT2 = GT2,
-                    DC1 = DC1,
-                    # cor_hthm_5tol = cor_hthm_5tol,
-                    # cor_hthm_10tol = cor_hthm_10tol,
-                    DC2 = DC2,
-                    # cor_htmm_20tol = cor_htmm_20tol,
-                    # cor_htmm_30tol = cor_htmm_30tol,
-                    DC3 = DC3,
-                    # cor_gt1 = cor_gt1,
-                    # cor_gt2 = cor_gt2,
-                    # ctcm_pe <- ctcm_pe,
-                    # ctcm_tli <- ctcm_tli,
-                    BG = BG,
-                    # ctum_p = ctum_p,
-                    W_chisq = W_chisq,
-                    # ctum_stum_p = ctum_stum_p,
-                    W_nfi = W_nfi,
-                    # ctum_stum_nfi = ctum_stum_nfi,
-                    W_tli = W_tli,
-                    # ctum_stum_tli = ctum_stum_tli,
-                    ctcm_cicfa = ctcm_cicfa,
-                    # ctum_cicfa = ctum_cicfa,
-                    ctcm_chisqdif = ctcm_chisqdif,
-                    # ctum_chisqdif = ctum_chisqdif,
-                    # i_ctcm_pe = i_ctcm_pe,
-                    # i_ctcm_tli = i_ctcm_tli,
-                    i_ctcm_cicfa = i_ctcm_cicfa,
-                    # i_ctum_cicfa = i_ctum_cicfa,
-                    i_ctcm_chisqdif = i_ctcm_chisqdif
-                    # i_ctum_chisqdif = i_ctum_chisqdif
-                    # i_cicfa = i_cicfa,
-                    # i_chisqdif = i_chisqdif
+                    tcor = tcor,
+                    c_ctcmuc = c_ctcmuc,
+                    c_ctcmr = c_ctcmr,
+                    c_ctcmpc = c_ctcmpc,
+                    c_ctcmfc = c_ctcmfc,
+                    c_ctcu = c_ctcu,
+                    c_ctmin = c_ctmin,
+                    chi_ctcmuc = chi_ctcmuc,
+                    chi_ctcmr = chi_ctcmr,
+                    chi_ctcmpc = chi_ctcmpc,
+                    chi_ctcmfc = chi_ctcmfc,
+                    chi_ctcu = chi_ctcu,
+                    chi_ctmin = chi_ctmin
   )
-  return(out)
+  
+   return(out)
 }
