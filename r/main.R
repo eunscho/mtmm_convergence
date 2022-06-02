@@ -1,11 +1,11 @@
-main <- function(start = 1, end = 1296) {
-  n <- c(100, 250, 500, 1000)
+main <- function(start = 1, end = 128) {
+  n <- c(90, 400)
   m <- c(3, 5)
   t <- c(3, 5)
-  mload <- c(.1, .3, .5) # fan & lance c(.17, .28, .48)
-  tload <- c(.3, .5, .7) # fan & lance c(.31, .50, .69)
-  mcor <- c(0, .3, .6) # fan & lance c(.02, .29, .58)
-  tcor <- c(.1, .4, .7) # fan & lance c(.07, .36, .61)
+  mload <- c(.2, .5) # fan & lance c(.17, .28, .48)
+  tload <- c(.3, .7) # fan & lance c(.31, .50, .69)
+  mcor <- c(0, .6) # fan & lance c(.02, .29, .58)
+  tcor <- c(.1, .6) # fan & lance c(.07, .36, .61)
   conditions <- tidyr::crossing(n, m, t, mload, tload, mcor, tcor)
   colnames(conditions) <- c("n", "m", "t", "mload", "tload", "mcor", "tcor")
   REP_PER_CONDITION <- 100
