@@ -425,6 +425,5 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
                     tvmae_ctcu = tvmae_ctcu,
                     tvmae_ctmin = tvbias_ctmin
   )
-  
    return(out)
 }
