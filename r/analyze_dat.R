@@ -278,6 +278,35 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
   tlbias_ctcmfc <- sum(e_ctcmfc$lambda[, 1:t]) - tload * t * m
   tlbias_ctcu <- sum(e_ctcu$lambda[, 1:t]) - tload * t * m
   tlbias_ctmin <- sum(e_ctmin$lambda[, 1:t]) - tload * t * m
+  #mae in trait loadings
+  tlmae_ctcmuc <- mean(abs(rowSums(e_ctcmuc$lambda[, 1:t]) - tload))
+  tlmae_ctcmr <- mean(abs(rowSums(e_ctcmr$lambda[, 1:t]) - tload))
+  tlmae_ctcmpc <- mean(abs(rowSums(e_ctcmpc$lambda[, 1:t]) - tload))
+  tlmae_ctcmfc <- mean(abs(rowSums(e_ctcmfc$lambda[, 1:t]) - tload))
+  tlmae_ctcu <- mean(abs(rowSums(e_ctcu$lambda[, 1:t]) - tload))
+  tlmae_ctmin <- mean(abs(rowSums(e_ctmin$lambda[, 1:t]) - tload))
+  # estimated trait correlations
+  etvar_ctcmuc <- cov2cor(e_ctcmuc$psi[1:m, 1:m])
+  etvar_ctcmr <- cov2cor(e_ctcmr$psi[1:m, 1:m])
+  etvar_ctcmpc <- cov2cor(e_ctcmpc$psi[1:m, 1:m])
+  etvar_ctcmfc <- cov2cor(e_ctcmfc$psi[1:m, 1:m])
+  etvar_ctcu <- cov2cor(e_ctcu$psi[1:m, 1:m])
+  etvar_ctmin <- cov2cor(e_ctmin$psi[1:m, 1:m])
+  # bias of trait correlations
+  tvbias_ctcmuc <- sum(etvar_ctcmuc[lower.tri(etvar_ctcmuc)] - tcor)
+  tvbias_ctcmr <- sum(etvar_ctcmr[lower.tri(etvar_ctcmr)] - tcor)
+  tvbias_ctcmpc <- sum(etvar_ctcmpc[lower.tri(etvar_ctcmpc)] - tcor)
+  tvbias_ctcmfc <- sum(etvar_ctcmfc[lower.tri(etvar_ctcmfc)] - tcor)
+  tvbias_ctcu <- sum(etvar_ctcu[lower.tri(etvar_ctcu)] - tcor)
+  tvbias_ctmin <- sum(etvar_ctmin[lower.tri(etvar_ctmin)] - tcor)
+  # mae of trait correlations
+  tvmae_ctcmuc <- mean(abs(etvar_ctcmuc[lower.tri(etvar_ctcmuc)] - tcor))
+  tvmae_ctcmr <- mean(abs(etvar_ctcmr[lower.tri(etvar_ctcmr)] - tcor))
+  tvmae_ctcmpc <- mean(abs(etvar_ctcmpc[lower.tri(etvar_ctcmpc)] - tcor))
+  tvmae_ctcmfc <- mean(abs(etvar_ctcmfc[lower.tri(etvar_ctcmfc)] - tcor))
+  tvmae_ctcu <- mean(abs(etvar_ctcu[lower.tri(etvar_ctcu)] - tcor))
+  tvmae_ctmin <- mean(abs(etvar_ctmin[lower.tri(etvar_ctmin)] - tcor))
+    
   # the ratio of trait variance
   # tvar_ctcmuc <- simtvar(e_ctcmuc$lambda[, 1:t], 
   #                        e_ctcmuc$lambda[, (t+1):(t+m)],
@@ -376,7 +405,25 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
                     tlbias_ctcmpc = tlbias_ctcmpc,
                     tlbias_ctcmfc = tlbias_ctcmfc,
                     tlbias_ctcu = tlbias_ctcu,
-                    tlbias_ctmin = tlbias_ctmin
+                    tlbias_ctmin = tlbias_ctmin,
+                    tlmae_ctcmuc = tlmae_ctcmuc,
+                    tlmae_ctcmr = tlmae_ctcmr,
+                    tlmae_ctcmpc = tlmae_ctcmpc,
+                    tlmae_ctcmfc = tlmae_ctcmfc,
+                    tlmae_ctcu = tlmae_ctcu,
+                    tlmae_ctmin = tlmae_ctmin,
+                    tvbias_ctcmuc = tvbias_ctcmuc,
+                    tvbias_ctcmr = tvbias_ctcmr,
+                    tvbias_ctcmpc = tvbias_ctcmpc,
+                    tvbias_ctcmfc = tvbias_ctcmfc,
+                    tvbias_ctcu = tvbias_ctcu,
+                    tvbias_ctmin = tvbias_ctmin,
+                    tvmae_ctcmuc = tvmae_ctcmuc,
+                    tvmae_ctcmr = tvmae_ctcmr,
+                    tvmae_ctcmpc = tvmae_ctcmpc,
+                    tvmae_ctcmfc = tvmae_ctcmfc,
+                    tvmae_ctcu = tvmae_ctcu,
+                    tvmae_ctmin = tvbias_ctmin
   )
   
    return(out)

@@ -1,5 +1,5 @@
 main <- function(start = 1, end = 128) {
-  n <- c(90, 400)
+  n <- c(70, 600)
   m <- c(3, 5)
   t <- c(3, 5)
   mload <- c(.2, .5) # fan & lance c(.17, .28, .48)
@@ -8,7 +8,7 @@ main <- function(start = 1, end = 128) {
   tcor <- c(.1, .6) # fan & lance c(.07, .36, .61)
   conditions <- tidyr::crossing(n, m, t, mload, tload, mcor, tcor)
   colnames(conditions) <- c("n", "m", "t", "mload", "tload", "mcor", "tcor")
-  REP_PER_CONDITION <- 100
+  REP_PER_CONDITION <- 1
   SET_PER_CONDITION <- 10
   rep_sets <- 1:SET_PER_CONDITION
   reps_per_set <- 1:(REP_PER_CONDITION/SET_PER_CONDITION)
@@ -22,8 +22,8 @@ main <- function(start = 1, end = 128) {
       if (!file.exists(filename)) {
         for (rep in reps_per_set) {
           cat("conv: ", condition_number, "rep set: ", rep_set, "rep: ", rep)
-          data <- generate_dat (conditions, condition_number, rep_set, rep)
-          temp <- analyze_dat (conditions, condition_number, rep_set, rep, data)
+          data <- generate_dat(conditions, condition_number, rep_set, rep)
+          temp <- analyze_dat(conditions, condition_number, rep_set, rep, data)
           if (rep == 1) {
             out <- temp
           } else {
