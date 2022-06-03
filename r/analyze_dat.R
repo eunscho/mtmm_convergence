@@ -254,70 +254,70 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
   e_ctmin <- lavInspect(o_ctmin, "est")
   # inadmissible solutions
   if (min(diag(e_ctcmuc$theta)) + TOLERANCE < 0 | outrange(e_ctcmuc$psi, TOLERANCE)) {
-    in_ctcmuc <- TRUE
+    in_ctcmuc <- 1
   } else {
-    in_ctcmuc <- FALSE
+    in_ctcmuc <- 0
   }
   if (min(diag(e_ctcmr$theta)) + TOLERANCE < 0 | outrange(e_ctcmr$psi, TOLERANCE)) {
-    in_ctcmr <- TRUE
+    in_ctcmr <- 1
   } else {
-    in_ctcmr <- FALSE
+    in_ctcmr <- 0
   }
   if (min(diag(e_ctcmpc$theta)) + TOLERANCE < 0 | outrange(e_ctcmpc$psi, TOLERANCE)) {
-    in_ctcmpc <- TRUE
+    in_ctcmpc <- 1
   } else {
-    in_ctcmpc <- FALSE
+    in_ctcmpc <- 0
   }
   if (min(diag(e_ctcmfc$theta)) + TOLERANCE < 0 | outrange(e_ctcmfc$psi, TOLERANCE)) {
-    in_ctcmfc <- TRUE
+    in_ctcmfc <- 1
   } else {
-    in_ctcmfc <- FALSE
+    in_ctcmfc <- 0
   }
   if (min(diag(e_ctum$theta)) + TOLERANCE < 0 | outrange(e_ctum$psi, TOLERANCE)) {
-    in_ctum <- TRUE
+    in_ctum <- 1
   } else {
-    in_ctum <- FALSE
+    in_ctum <- 0
   }
   if (min(diag(e_ctcom$theta)) + TOLERANCE < 0 | outrange(e_ctcom$psi, TOLERANCE)) {
-    in_ctcom <- TRUE
+    in_ctcom <- 1
   } else {
-    in_ctcom <- FALSE
+    in_ctcom <- 0
   }
   if (min(diag(e_ctcu$theta)) + TOLERANCE < 0 | outrange(e_ctcu$psi, TOLERANCE) | outrange(e_ctcu$theta, TOLERANCE)) {
-    in_ctcu <- TRUE
+    in_ctcu <- 1
   } else {
-    in_ctcu <- FALSE
+    in_ctcu <- 0
   }
   if (min(diag(e_ctmin$theta)) + TOLERANCE < 0 | outrange(e_ctmin$psi, TOLERANCE)) {
-    in_ctmin <- TRUE
+    in_ctmin <- 1
   } else {
-    in_ctmin <- FALSE
+    in_ctmin <- 0
   }
   # boundary solutions
-  bnd_ctcmuc <- FALSE
-  bnd_ctcmr <- FALSE
+  bnd_ctcmuc <- 0
+  bnd_ctcmr <- 0
   if (min(diag(e_ctcmpc$theta)) < TOLERANCE) {
-    bnd_ctcmpc <- TRUE
+    bnd_ctcmpc <- 1
   } else {
-    bnd_ctcmpc <- FALSE
+    bnd_ctcmpc <- 0
   }
   if (min(diag(e_ctcmfc$theta)) < TOLERANCE | corone(e_ctcmfc$psi, TOLERANCE)) {
-    bnd_ctcmfc <- TRUE
+    bnd_ctcmfc <- 1
   } else {
-    bnd_ctcmfc <- FALSE
+    bnd_ctcmfc <- 0
   }
-  bnd_ctum <- FALSE
-  bnd_ctcom <- FALSE
-  bnd_ctcu <- FALSE
-  bnd_ctmin <- FALSE
+  bnd_ctum <- 0
+  bnd_ctcom <- 0
+  bnd_ctcu <- 0
+  bnd_ctmin <- 0
   # rindskopf's reparameterization vs. partial constraining equality
   if (is.na(chi_ctcmr) | is.na(chi_ctcmpc)) {
    r_pc_equal <- NA
   } else {
    if(abs(chi_ctcmr - chi_ctcmpc) < TOLERANCE) {
-     r_pc_equal <- TRUE
+     r_pc_equal <- 1
    } else
-     r_pc_equal <- FALSE
+     r_pc_equal <- 0
   }
 
   # bias in trait loadings
@@ -390,7 +390,7 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
   # tvar_ctcu <- simtvar(tloadmat = e_ctcu$lambda[, 1:t], 
   #                        tcov = e_ctcu$psi[1:t, 1:t],
   #                        errorcov = e_ctcu$theta,
-  #                        ctcu = TRUE)
+  #                        ctcu = 1)
   # tvar_ctmin <- simtvar(e_ctmin$lambda[, 1:t], 
   #                        e_ctmin$lambda[, (t+1):(t+(m - 1))],
   #                        e_ctmin$psi[1:t, 1:t],
