@@ -8,7 +8,7 @@ main <- function(start = 1, end = 128) {
   tcor <- c(.1, .6) # fan & lance c(.07, .36, .61)
   conditions <- tidyr::crossing(n, m, t, mload, tload, mcor, tcor)
   colnames(conditions) <- c("n", "m", "t", "mload", "tload", "mcor", "tcor")
-  REP_PER_CONDITION <- 100
+  REP_PER_CONDITION <- 1000
   SET_PER_CONDITION <- 10
   rep_sets <- 1:SET_PER_CONDITION
   reps_per_set <- 1:(REP_PER_CONDITION/SET_PER_CONDITION)
