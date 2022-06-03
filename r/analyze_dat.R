@@ -145,14 +145,14 @@ analyze_dat <- function(conditions, condition_number, rep_set, rep, data) {
   o_ctcu <- cfa(m_ctcu, data, control = list(iter.max = 250))
   o_ctmin <- cfa(m_ctmin, data, control = list(iter.max = 250))
   # convergence
-  c_ctcmuc <- lavInspect(o_ctcmuc, "converged")
-  c_ctcmr <- lavInspect(o_ctcmr, "converged")
-  c_ctcmpc <- lavInspect(o_ctcmpc, "converged")
-  c_ctcmfc <- lavInspect(o_ctcmfc, "converged")
-  c_ctum <- lavInspect(o_ctum, "converged")
-  c_ctcom <- lavInspect(o_ctcom, "converged")
-  c_ctcu <- lavInspect(o_ctcu, "converged")
-  c_ctmin <- lavInspect(o_ctmin, "converged")
+  c_ctcmuc <- as.integer(lavInspect(o_ctcmuc, "converged"))
+  c_ctcmr <- as.integer(lavInspect(o_ctcmr, "converged"))
+  c_ctcmpc <- as.integer(lavInspect(o_ctcmpc, "converged"))
+  c_ctcmfc <- as.integer(lavInspect(o_ctcmfc, "converged"))
+  c_ctum <- as.integer(lavInspect(o_ctum, "converged"))
+  c_ctcom <- as.integer(lavInspect(o_ctcom, "converged"))
+  c_ctcu <- as.integer(lavInspect(o_ctcu, "converged"))
+  c_ctmin <- as.integer(lavInspect(o_ctmin, "converged"))
   # fit
   if (c_ctcmuc) {
     f_ctcmuc <- lavInspect(o_ctcmuc, "fit")
